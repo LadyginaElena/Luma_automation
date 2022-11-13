@@ -97,9 +97,7 @@ jobs:
       #    Run tests and generate junit xml report
       #----------------------------------------------
       - name: Run pytest
-        run: |
-          source .venv/bin/activate
-          poetry run pytest --junitxml report.xml
+        run: poetry run pytest --junitxml report.xml
       - name: Create test summary
         uses: test-summary/action@v2.0
         with:
