@@ -15,14 +15,9 @@ permissions:
   contents: read
 
 jobs:
-  bild:
+  bild_linting_and_tests:
     runs-on: ubuntu-latest
     steps:
-      #----------------------------------------------
-      #       first iteration
-      #----------------------------------------------
-      - name: First interaction
-        uses: actions/first-interaction@v1.1.1
       #----------------------------------------------
       #       check-out repo and set-up python
       #----------------------------------------------
@@ -33,47 +28,6 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-      #----------------------------------------------
-      #  -----  install & configure poetry  -----
-      #----------------------------------------------
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-          installer-parallel: true
-      #----------------------------------------------
-      #       load cached venv if cache exists
-      #----------------------------------------------
-      - name: Load cached venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v3
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
-      #----------------------------------------------
-      # install dependencies if cache does not exist
-      #----------------------------------------------
-      - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install --no-interaction --no-root
-      #----------------------------------------------
-      # install your root project, if required
-      #----------------------------------------------
-      - name: Install project
-        run: poetry install --no-interaction
-      #----------------------------------------------
-      # install Chrom
-      #----------------------------------------------
-      - name: Update repo
-        run: sudo apt-get update
-      - name: Setup Chrome
-        uses: browser-actions/setup-chrome@v0.0.0
-
-
-  linting:
-    needs: bild
-    runs-on: ubuntu-latest
       #----------------------------------------------
       #              Python black and flake8
       #----------------------------------------------
@@ -90,20 +44,40 @@ jobs:
           extra-pylint-options: ""
           extra-pycodestyle-options: ""
           extra-flake8-options: "--count --benchmark --ignore=E501"
-          extra-black-options: ". -s"
+          extra-black-options: ". -S"
           extra-mypy-options: ""
           extra-isort-options: ""
-
-  tests:
-    needs: linting
-    runs-on: ubuntu-latest        
+      #----------------------------------------------
+      #            install Chrom
+      #----------------------------------------------
+      - name: Update repo
+        run: sudo apt-get update
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v0.0.0
+      #----------------------------------------------
+      #  -----  install & configure poetry  -----
+      #----------------------------------------------
+      - name: Install Poetry Action
+        uses: snok/install-poetry@v1.3.3
+      #----------------------------------------------
+      #       load cached venv if cache exists
+      #----------------------------------------------
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+#      #----------------------------------------------
+      # install your root project, if required
+      #----------------------------------------------
+      - name: Install project dependencies
+        run: poetry install
       #----------------------------------------------
       #    Run tests and generate junit xml report
       #----------------------------------------------
-      - name: Run pytest
-        run: |
-          source .venv/bin/activate
-          poetry run pytest --junitxml report.xml
+      - name: Test with pytest
+        run: poetry run pytest --junitxml report.xml
       - name: Create test summary
         uses: test-summary/action@v2.0
         with:
@@ -114,10 +88,25 @@ jobs:
         if: always()
         with:
           junit_files: "report.xml"
+      #----------------------------------------------
+      #    run test suite and output coverage file
+      #----------------------------------------------
+#      - name: Test with pytest
+#        run: poetry run pytest --cov=<project-dir> --cov-report=xml
+#      #----------------------------------------------
+#      #             upload coverage stats
+#      # (requires CODECOV_TOKEN in repository secrets)
+#      #----------------------------------------------
+#      - name: Upload coverage
+#        uses: codecov/codecov-action@v3.1.1
+#        with:
+#          file: ./coverage.xml
+#          fail_ci_if_error: true
 
   report:
-    needs: tests
-    runs-on: ubuntu-latest 
+    needs: bild_linting_and_tests
+    runs-on: ubuntu-latest
+    steps:
       #----------------------------------------------
       #    Create and deploy allure report
       #----------------------------------------------

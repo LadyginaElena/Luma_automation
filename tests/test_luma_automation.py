@@ -1,7 +1,6 @@
 from selenium.webdriver.common.by import By
 
 # Создать автоматический тест по следующему сценарию:
-#
 # Открыть сайт https://magento.softwaretestingboard.com/
 # Кликнуть пункт меню на Women
 # Проверить, что на нужной странице
