@@ -62,13 +62,13 @@ jobs:
       #----------------------------------------------
       #       load cached venv if cache exists
       #----------------------------------------------
-      - name: Load cached venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v3
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
-      #----------------------------------------------
+#      - name: Load cached venv
+#        id: cached-poetry-dependencies
+#        uses: actions/cache@v3
+#        with:
+#          path: .venv
+#          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+#      #----------------------------------------------
       # install your root project, if required
       #----------------------------------------------
       - name: Install project
@@ -76,7 +76,7 @@ jobs:
       #----------------------------------------------
       #    Run tests and generate junit xml report
       #----------------------------------------------
-      - name: Run pytest
+      - name: Test with pytest
         run: poetry run pytest --junitxml report.xml --cov=<project-dir> --cov-report=xml/
           coverage report
 #      - name: Run pytest
@@ -98,11 +98,11 @@ jobs:
       #             upload coverage stats
       # (requires CODECOV_TOKEN in repository secrets)
       #----------------------------------------------
-#      - name: Upload coverage
-#        uses: codecov/codecov-action@v3.1.1
-#        with:
-#          file: ./coverage.xml
-#          fail_ci_if_error: true
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3.1.1
+        with:
+          file: ./coverage.xml
+          fail_ci_if_error: true
 
   report:
     needs: bild_linting_and_tests
