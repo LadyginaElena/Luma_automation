@@ -73,34 +73,28 @@ jobs:
           path: .venv
           key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
       #----------------------------------------------
-      # install dependencies if cache does not exist
-      #----------------------------------------------
-      - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install --no-interaction --no-root
-      #----------------------------------------------
       # install your root project, if required
       #----------------------------------------------
       - name: Install project
-        run: poetry install --no-interaction
-            #----------------------------------------------
+        run: poetry install
+      #----------------------------------------------
       #    Run tests and generate junit xml report
       #----------------------------------------------
       - name: Run pytest
         run: |
           source .venv/bin/activate
-          pytest --junitxml report.xml --cov=<project-dir> --cov-report=xml/
-          coverage report
+          poetry run pytest --junitxml report.xml --cov=<project-dir> --cov-report=xml/
+#          coverage report
 #      - name: Run pytest
 #        run: poetry run pytest --junitxml report.xml
-      - name: Create test summary
-        uses: test-summary/action@v2.0
-        with:
-          paths: report.xml
-        if: always()
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
-        if: always()
+#      - name: Create test summary
+#        uses: test-summary/action@v2.0
+#        with:
+#          paths: report.xml
+#        if: always()
+#      - name: Publish Test Results
+#        uses: EnricoMi/publish-unit-test-result-action@v2
+#        if: always()
       #----------------------------------------------
       #    run test suite and output coverage file
       #----------------------------------------------
@@ -110,11 +104,11 @@ jobs:
       #             upload coverage stats
       # (requires CODECOV_TOKEN in repository secrets)
       #----------------------------------------------
-      - name: Upload coverage
-        uses: codecov/codecov-action@v3.1.1
-        with:
-          file: ./coverage.xml
-          fail_ci_if_error: true
+#      - name: Upload coverage
+#        uses: codecov/codecov-action@v3.1.1
+#        with:
+#          file: ./coverage.xml
+#          fail_ci_if_error: true
 
   report:
     needs: bild_linting_and_tests
