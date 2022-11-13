@@ -19,11 +19,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       #----------------------------------------------
-      #       first iteration
-      #----------------------------------------------
-      - name: First interaction
-        uses: actions/first-interaction@v1.1.1
-      #----------------------------------------------
       #       check-out repo and set-up python
       #----------------------------------------------
       - name: Check out repository
