@@ -48,7 +48,7 @@ jobs:
           extra-mypy-options: ""
           extra-isort-options: ""
       #----------------------------------------------
-      # install Chrom
+      #            install Chrom
       #----------------------------------------------
       - name: Update repo
         run: sudo apt-get update
@@ -71,14 +71,14 @@ jobs:
 #      #----------------------------------------------
       # install your root project, if required
       #----------------------------------------------
-      - name: Install project
+      - name: Install project dependencies
         run: poetry install
       #----------------------------------------------
       #    Run tests and generate junit xml report
       #----------------------------------------------
       - name: Test with pytest
-        run: poetry run pytest --junitxml report.xml --cov=<project-dir> --cov-report=xml/
-          coverage report
+        run: poetry run pytest --junitxml report.xml
+#          coverage report
 #      - name: Run pytest
 #        run: poetry run pytest --junitxml report.xml
       - name: Create test summary
