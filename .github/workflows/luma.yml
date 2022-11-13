@@ -15,7 +15,7 @@ permissions:
   contents: read
 
 jobs:
-  bild:
+  bild_linting_and_tests:
     runs-on: ubuntu-latest
     steps:
       #----------------------------------------------
@@ -28,6 +28,32 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
+      #----------------------------------------------
+      #              Python black and flake8
+      #----------------------------------------------
+      - name: Python black and flake8
+        uses: ricardochaves/python-lint@v1.4.0
+        with:
+          python-root-list: ""
+          use-pylint: false
+          use-pycodestyle: false
+          use-flake8: true
+          use-black: true
+          use-mypy: false
+          use-isort: false
+          extra-pylint-options: ""
+          extra-pycodestyle-options: ""
+          extra-flake8-options: "--count --benchmark --ignore=E501"
+          extra-black-options: ". -S"
+          extra-mypy-options: ""
+          extra-isort-options: ""
+      #----------------------------------------------
+      # install Chrom
+      #----------------------------------------------
+      - name: Update repo
+        run: sudo apt-get update
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v0.0.0
       #----------------------------------------------
       #  -----  install & configure poetry  -----
       #----------------------------------------------
@@ -57,42 +83,16 @@ jobs:
       #----------------------------------------------
       - name: Install project
         run: poetry install --no-interaction
-      #----------------------------------------------
-      # install Chrom
-      #----------------------------------------------
-      - name: Update repo
-        run: sudo apt-get update
-      - name: Setup Chrome
-        uses: browser-actions/setup-chrome@v0.0.0
-
-  linting_and_tests:
-    needs: bild
-    runs-on: ubuntu-latest
-    steps:
-      #----------------------------------------------
-      #              Python black and flake8
-      #----------------------------------------------
-      - name: Python black and flake8
-        uses: ricardochaves/python-lint@v1.4.0
-        with:
-          python-root-list: ""
-          use-pylint: false
-          use-pycodestyle: false
-          use-flake8: true
-          use-black: true
-          use-mypy: false
-          use-isort: false
-          extra-pylint-options: ""
-          extra-pycodestyle-options: ""
-          extra-flake8-options: "--count --benchmark --ignore=E501"
-          extra-black-options: ". -S"
-          extra-mypy-options: ""
-          extra-isort-options: ""
-      #----------------------------------------------
+            #----------------------------------------------
       #    Run tests and generate junit xml report
       #----------------------------------------------
       - name: Run pytest
-        run: poetry run pytest --junitxml report.xml
+        run: |
+          source .venv/bin/activate
+          pytest --junitxml report.xml --cov=<project-dir> --cov-report=xml/
+          coverage report
+#      - name: Run pytest
+#        run: poetry run pytest --junitxml report.xml
       - name: Create test summary
         uses: test-summary/action@v2.0
         with:
@@ -104,8 +104,8 @@ jobs:
       #----------------------------------------------
       #    run test suite and output coverage file
       #----------------------------------------------
-      - name: Test with pytest
-        run: poetry run pytest --cov=<project-dir> --cov-report=xml
+#      - name: Test with pytest
+#        run: poetry run pytest --cov=<project-dir> --cov-report=xml
       #----------------------------------------------
       #             upload coverage stats
       # (requires CODECOV_TOKEN in repository secrets)
@@ -117,7 +117,7 @@ jobs:
           fail_ci_if_error: true
 
   report:
-    needs: linting_and_tests
+    needs: bild_linting_and_tests
     runs-on: ubuntu-latest
     steps:
       #----------------------------------------------
