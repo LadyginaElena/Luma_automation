@@ -84,7 +84,9 @@ jobs:
       #    Run tests and generate junit xml report
       #----------------------------------------------
       - name: Test with pytest
-        run: poetry run pytest --junitxml report.xml --cov=<project-dir> --cov-report=xml
+        run: |
+          poetry run pytest --junitxml report.xml
+#          pytest --cov=./ --cov-report=xml
       - name: Create test summary
         uses: test-summary/action@v2.0
         with:
