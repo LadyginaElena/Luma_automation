@@ -57,6 +57,11 @@ jobs:
       #----------------------------------------------
       #  -----  install & configure poetry  -----
       #----------------------------------------------
+      - name: Load cached Poetry installation
+        uses: actions/cache@v3
+        with:
+          path: ~/.local  # the path depends on the OS
+          key: poetry-0  # increment to reset cache
       - name: Install Poetry Action
         uses: snok/install-poetry@v1.3.3
       #----------------------------------------------
@@ -77,7 +82,7 @@ jobs:
       #    Run tests and generate junit xml report
       #----------------------------------------------
       - name: Test with pytest
-        run: poetry run pytest --junitxml report.xml --cov=<project-dir> --cov-report=xml
+        run: poetry run pytest --junitxml report.xml
       - name: Create test summary
         uses: test-summary/action@v2.0
         with:
@@ -91,8 +96,10 @@ jobs:
       #----------------------------------------------
       #    run test suite and output coverage file
       #----------------------------------------------
-#      - name: Test with pytest
-#        run: poetry run pytest --cov=<project-dir> --cov-report=xml
+      - name: Coverage with pytest
+        run: | 
+          poetry add pytest-cov/
+          poetry run coverage report
 #      #----------------------------------------------
 #      #             upload coverage stats
 #      #----------------------------------------------
