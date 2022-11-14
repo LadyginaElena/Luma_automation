@@ -78,11 +78,13 @@ jobs:
       #----------------------------------------------
       - name: Install project dependencies
         run: poetry install
+      - name: Coverage with pytest
+        run: poetry add pytest-codecov
       #----------------------------------------------
       #    Run tests and generate junit xml report
       #----------------------------------------------
       - name: Test with pytest
-        run: poetry run pytest --junitxml report.xml
+        run: poetry run pytest --junitxml report.xml --cov=<project-dir> --cov-report=xml
       - name: Create test summary
         uses: test-summary/action@v2.0
         with:
@@ -96,8 +98,8 @@ jobs:
       #----------------------------------------------
       #    run test suite and output coverage file
       #----------------------------------------------
-      - name: Coverage with pytest
-        run: poetry add pytest-codecov
+#      - name: Coverage with pytest
+#        run: poetry add pytest-codecov
       - name: Run coverage report
         run: poetry run coverage report
 #      #----------------------------------------------
