@@ -98,7 +98,7 @@ jobs:
       #----------------------------------------------
       - name: Coverage with pytest
         run: | 
-          poetry add pytest-cov/
+          poetry add pytest-codecov/
           poetry run coverage report
 #      #----------------------------------------------
 #      #             upload coverage stats
