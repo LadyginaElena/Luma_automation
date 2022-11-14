@@ -97,9 +97,9 @@ jobs:
       #    run test suite and output coverage file
       #----------------------------------------------
       - name: Coverage with pytest
-        run: | 
-          poetry add pytest-codecov allure-pytest/
-          poetry run coverage report
+        run: poetry add pytest-codecov
+      - name: Run coverage report
+        run: poetry run coverage report
 #      #----------------------------------------------
 #      #             upload coverage stats
 #      #----------------------------------------------
