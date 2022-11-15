@@ -13,6 +13,8 @@ permissions:
   checks: write
   pull-requests: write
   contents: read
+  repository-projects: write
+  issues: write
 
 jobs:
   bild_linting_and_tests:
