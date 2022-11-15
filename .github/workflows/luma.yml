@@ -13,6 +13,9 @@ permissions:
   checks: write
   pull-requests: write
   contents: read
+  repository-projects: write
+  issues: write
+  github-actions[bot]: write
 
 jobs:
   bild_linting_and_tests:
@@ -57,6 +60,11 @@ jobs:
       #----------------------------------------------
       #  -----  install & configure poetry  -----
       #----------------------------------------------
+      - name: Load cached Poetry installation
+        uses: actions/cache@v3
+        with:
+          path: ~/.local  # the path depends on the OS
+          key: poetry-0  # increment to reset cache
       - name: Install Poetry Action
         uses: snok/install-poetry@v1.3.3
       #----------------------------------------------
@@ -73,6 +81,8 @@ jobs:
       #----------------------------------------------
       - name: Install project dependencies
         run: poetry install
+      - name: Allure install
+        run: poetry add allure-pytest
       #----------------------------------------------
       #    Run tests and generate junit xml report
       #----------------------------------------------
@@ -88,27 +98,34 @@ jobs:
         if: always()
         with:
           junit_files: "report.xml"
-      #----------------------------------------------
-      #    run test suite and output coverage file
-      #----------------------------------------------
-#      - name: Test with pytest
-#        run: poetry run pytest --cov=<project-dir> --cov-report=xml
-#      #----------------------------------------------
-#      #             upload coverage stats
-#      # (requires CODECOV_TOKEN in repository secrets)
-#      #----------------------------------------------
-#      - name: Upload coverage
-#        uses: codecov/codecov-action@v3.1.1
-#        with:
-#          file: ./coverage.xml
-#          fail_ci_if_error: true
+      - name: Run Test
+        if: always()
+        run: poetry run pytest --alluredir=allure-results
+        continue-on-error: true
 
-  report:
-    needs: bild_linting_and_tests
-    runs-on: ubuntu-latest
-    steps:
+      - name: Get Allure history
+        uses: actions/checkout@v2
+        if: always()
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
       #----------------------------------------------
-      #    Create and deploy allure report
+      #    Generate allure report  report
       #----------------------------------------------
-      - name: Allure Report with history
-        uses: simple-elf/allure-report-action@v1.6
+      - name: Allure Report action from marketplace
+        uses: simple-elf/allure-report-action@master
+        if: always()
+        with:
+          allure_results: allure-results
+          allure_history: allure-history
+
+      - name: Deploy report to Github Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v2
+        env:
+          PERSONAL_TOKEN: ${{ secrets.ALLURE_DEPLOY }}
+          PUBLISH_BRANCH: gh-pages
+          PUBLISH_DIR: allure-history
+
+
