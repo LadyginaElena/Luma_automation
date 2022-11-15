@@ -107,7 +107,9 @@ jobs:
         with:
           ref: gh-pages
           path: gh-pages
-
+      #----------------------------------------------
+      #    Generate allure report  report
+      #----------------------------------------------
       - name: Allure Report action from marketplace
         uses: simple-elf/allure-report-action@master
         if: always()
