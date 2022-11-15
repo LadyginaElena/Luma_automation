@@ -18,3 +18,6 @@ def test_go_to_tees_psge_too(driver):
     menu_women = driver.find_element(By.LINK_TEXT, "Women")
     menu_women.click()
     assert "tees" in driver.current_url, "Wrong page error"
+
+
+# test comment
