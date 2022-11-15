@@ -119,17 +119,8 @@ jobs:
         if: always()
         uses: peaceiris/actions-gh-pages@v2
         env:
-          PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PUBLISH_BRANCH: gh-pages
           PUBLISH_DIR: allure-history
 
 
-  report:
-    needs: bild_linting_and_tests
-    runs-on: ubuntu-latest
-    steps:
-      #----------------------------------------------
-      #    Create and deploy allure report
-      #----------------------------------------------
-      - name: Allure Report with history
-        uses: simple-elf/allure-report-action@v1.6
