@@ -15,7 +15,7 @@ permissions:
   contents: read
   repository-projects: write
   issues: write
-  github-actions[bot]: write
+
 
 jobs:
   bild_linting_and_tests:
