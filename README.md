@@ -2,7 +2,7 @@
 [![Bild and test](https://github.com/LadyginaElena/Luma_automation/actions/workflows/luma.yml/badge.svg)](https://github.com/LadyginaElena/Luma_automation/actions/workflows/luma.yml)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-[ALLURE REPORT](https://ladyginaelena.github.io/Luma_automation/)
+[**ALLURE REPORT**](https://ladyginaelena.github.io/Luma_automation/)
 
 
 [![Python](https://img.shields.io/badge/-Python-464646?style=flat-square&logo=Python)](https://www.python.org/)
