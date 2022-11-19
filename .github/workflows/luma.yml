@@ -133,7 +133,7 @@ jobs:
         if: always()
         uses: Sibz/github-status-action@v1
         with:
-          PERSONAL_TOKEN: ${{secrets.ALLURE_DEPLOY}}
+          authToken: ${{secrets.ALLURE_DEPLOY}}
           context: 'Test report'
           state: 'success'
           sha: ${{ github.event.pull_request.head.sha }}
