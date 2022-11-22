@@ -3,9 +3,10 @@
 
 name: Deploy report
 
-workflow_run:
-    workflows: [Luma bild, test and report]
-    types: [completed]
+on:
+   workflow_run:
+     workflows: [Luma bild, test and report]
+     types: [completed]
 
 jobs:
   on-success:
