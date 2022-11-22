@@ -4,7 +4,7 @@
 name: Deploy report
 
 workflow_run:
-    workflows: [Bild]
+    workflows: [Luma bild, test and report]
     types: [completed]
 
 jobs:
