@@ -5,8 +5,7 @@ name: Deploy report
 
 workflow_run:
     workflows: [Bild]
-    types:
-      - completed
+    types: [completed]
 
 jobs:
   on-success:
