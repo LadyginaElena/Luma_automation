@@ -9,7 +9,6 @@ on:
        - closed
 
 jobs:
-  needs: bild_linting_and_tests
   if_merged:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
