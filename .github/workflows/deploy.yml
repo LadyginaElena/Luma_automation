@@ -4,14 +4,14 @@
 name: Deploy report
 
 on:
-   workflow_run:
-     workflows: [Luma bild, test and report]
-     types: [completed]
+   pull_request_target:
+     types:
+       - closed
 
 jobs:
-  on-success:
+  if_merged:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       #----------------------------------------------
       #    Get Allure history
@@ -43,11 +43,7 @@ jobs:
           PERSONAL_TOKEN: ${{ secrets.ALLURE_DEPLOY  }}
           PUBLISH_BRANCH: gh-pages
           PUBLISH_DIR: allure-history
-  on-failure:
-    runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
-    steps:
-      - run: echo 'The triggering workflow failed'
+
 
 
 
