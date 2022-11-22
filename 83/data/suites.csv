@@ -1,3 +1,0 @@
-"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
-"passed","Wed Nov 16 07:05:50 GMT 2022","Wed Nov 16 07:05:51 GMT 2022","928","tests","test_luma_automation","","","","test_go_men_page",""
-"broken","Wed Nov 16 07:05:38 GMT 2022","Wed Nov 16 07:05:48 GMT 2022","10005","tests","test_luma_automation","","","","test_go_to_tees_page",""

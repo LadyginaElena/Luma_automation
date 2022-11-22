@@ -1,3 +1,0 @@
-"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
-"passed","Tue Nov 15 06:25:10 GMT 2022","Tue Nov 15 06:25:11 GMT 2022","710","tests","test_luma_automation","","","","test_go_to_tees_page",""
-"skipped","Tue Nov 15 06:25:12 GMT 2022","Tue Nov 15 06:25:13 GMT 2022","698","tests","test_luma_automation","","","","test_go_to_tees_psge_too",""

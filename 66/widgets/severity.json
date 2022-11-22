@@ -1,1 +1,0 @@
-[{"uid":"75f740f2a69c3a66","name":"test_go_to_tees_psge_too","time":{"start":1668492982129,"stop":1668492983084,"duration":955},"status":"skipped","severity":"normal"},{"uid":"f6eaccf36c207c29","name":"test_go_to_tees_page","time":{"start":1668492979225,"stop":1668492980156,"duration":931},"status":"passed","severity":"normal"}]
