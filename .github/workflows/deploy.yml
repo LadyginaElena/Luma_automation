@@ -14,28 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       #----------------------------------------------
-      #    Get Allure history
-      #----------------------------------------------
-      - name: Get Allure history
-        uses: actions/checkout@v2
-        if: always()
-        continue-on-error: true
-        with:
-          ref: gh-pages
-          path: gh-pages
-      #----------------------------------------------
-      #    Generate allure report
-      #----------------------------------------------
-      - name: Allure Report action from marketplace
-        uses: simple-elf/allure-report-action@master
-        if: always()
-        with:
-          allure_results: allure-results
-          allure_history: allure-history
-      #----------------------------------------------
       #    Deploy allure report  on gh-pages
       #----------------------------------------------
-
       - name: Deploy report to Github Pages
         if: always()
         uses: peaceiris/actions-gh-pages@v2
