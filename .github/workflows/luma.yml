@@ -4,9 +4,7 @@
 name: Luma bild, test and report
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
+   pull_request:
     branches: [ "main" ]
 
 permissions:
@@ -84,50 +82,14 @@ jobs:
       - name: Allure install
         run: poetry add allure-pytest
       #----------------------------------------------
-      #    Run tests and generate junit xml report
+      #    Run tests and generate allure xml report
       #----------------------------------------------
-      - name: Test with pytest
-        run: poetry run pytest --junitxml report.xml
-      - name: Create test summary
-        uses: test-summary/action@v2.0
-        with:
-          paths: report.xml
-        if: always()
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
-        if: always()
-        with:
-          junit_files: "report.xml"
       - name: Run Test
         if: always()
         run: poetry run pytest --alluredir=allure-results
         continue-on-error: true
 
-      - name: Get Allure history
-        uses: actions/checkout@v2
-        if: always()
-        continue-on-error: true
-        with:
-          ref: gh-pages
-          path: gh-pages
-      #----------------------------------------------
-      #    Generate allure report  report
-      #----------------------------------------------
-      - name: Allure Report action from marketplace
-        uses: simple-elf/allure-report-action@master
-        if: always()
-        with:
-          allure_results: allure-results
-          allure_history: allure-history
 
-
-      - name: Deploy report to Github Pages
-        if: always()
-        uses: peaceiris/actions-gh-pages@v2
-        env:
-          PERSONAL_TOKEN: ${{ secrets.ALLURE_DEPLOY  }}
-          PUBLISH_BRANCH: gh-pages
-          PUBLISH_DIR: allure-history
 
 
 
